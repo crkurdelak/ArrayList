@@ -64,17 +64,7 @@ public class ArrayList<E> {
      * false if this list contains elements
      */
     public boolean isEmpty() {
-        boolean result;
-        if (_index == 0) {
-            result = true;
-        }
-        else if (_index > 0) {
-            result = false;
-        }
-        else {
-            // TODO see if you need to throw an exception here
-        }
-        return result;
+        return _index == 0;
     }
 
 
@@ -101,8 +91,8 @@ public class ArrayList<E> {
      * Inserts the specified element at the specified position in this list. Shifts the element currently
      * at that position (if any) and any subsequent elements to the right (adds one to their indices).
      *
-     * @param index
-     * @param element
+     * @param index the index where the element will be inserted
+     * @param element the element to be inserted
      * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public void add(int index, E element) {
@@ -142,15 +132,16 @@ public class ArrayList<E> {
      * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public E remove(int index) {
-        E temp;
-        if (this.isValidIndex(index)) {
-            temp = this.set(index, null);
+        E oldElement;
+        if (this.isValidIndex(index) && !this.isEmpty()) {
+            oldElement = this.set(index, null);
             this.shiftElements(index, SHIFT_LEFT);
+            _index --;
         }
         else {
             throw new IndexOutOfBoundsException();
         }
-        return temp;
+        return oldElement;
     }
 
 
@@ -175,16 +166,15 @@ public class ArrayList<E> {
      * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public E set(int index, E element) {
-        // temporary variable to store old element
-        E temp;
+        E oldElement;
         if (this.isValidIndex(index)) {
-            temp = this.get(index);
+            oldElement = this.get(index);
             _values[index] = element;
         }
         else {
             throw new IndexOutOfBoundsException();
         }
-        return temp;
+        return oldElement;
     }
 
 
@@ -222,11 +212,7 @@ public class ArrayList<E> {
      * false if the index is invalid
      */
     private boolean isValidIndex(int index) {
-        boolean result = false;
-        if (index > 0 && index < this.size()) {
-            result = true;
-        }
-        return result;
+        return index >= 0 && index < this.size();
     }
 
 
