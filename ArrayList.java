@@ -1,7 +1,7 @@
 import java.util.Objects;
 
 /**
- * // TODO write class description
+ * TODO write class description
  * A list of elements of type E.
  *
  * @param <E> the type of elements in this list
@@ -74,7 +74,6 @@ public class ArrayList<E> {
         else {
             // TODO see if you need to throw an exception here
         }
-
         return result;
     }
 
@@ -104,14 +103,16 @@ public class ArrayList<E> {
      *
      * @param index
      * @param element
-     * @throws IndexOutOfBoundsException if the specified index is out of bounds
+     * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public void add(int index, E element) {
-        // validate index, if invalid, throw IndexOutOfBoundsException
         if (this.isValidIndex(index)) {
-            // TODO implement add()
+            if (_index >= _values.length) {
+                this.growArray();
+            }
             shiftElements(index, SHIFT_RIGHT);
             this.set(index, element);
+            _index ++;
         }
         else {
             throw new IndexOutOfBoundsException();
@@ -124,6 +125,7 @@ public class ArrayList<E> {
      *
      * @param element the element to be appended to this list
      * @return true if this collection has changed as a result of the call
+     * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public boolean add(E element) {
         add(_index, element);
@@ -140,12 +142,9 @@ public class ArrayList<E> {
      * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public E remove(int index) {
-        // TODO implement remove
         E temp;
         if (this.isValidIndex(index)) {
-            // use set method to set the element to null
             temp = this.set(index, null);
-            // shift elements to left to fill in hole
             this.shiftElements(index, SHIFT_LEFT);
         }
         else {
@@ -201,15 +200,10 @@ public class ArrayList<E> {
      * or -1 if this list does not contain the element.
      */
     public int indexOf(E element) {
-        // TODO implement indexOf
-        // linear search
         int index = NOT_FOUND;
         boolean isFound = false;
         int i = 0;
-        // go through array (while loop)
         while (!isFound && i < _index) {
-            // check if each element is the same as the target
-            // if found, exit loop, result = that index
             if (Objects.equals(element, this.get(i))) {
                 index = i;
                 isFound = true;
@@ -250,22 +244,28 @@ public class ArrayList<E> {
         _values = newArray;
     }
 
-    // TODO write private helper method to shift elements
+
     /**
      * Shifts elements to the left or right starting at the specified starting index.
-     * @param startingIndex the starting index
+     * @param index the starting index
      * @param direction Either -1 for left or 1 for right
      * @throws IllegalArgumentException if passed a value other than -1 or 1 for direction
      */
-    private void shiftElements(int startingIndex, int direction) {
-        // if 1, then shift to right
-        // for (int i = _index; i <= startingIndex; i--)
-        // this.set(this.get(i + 1), this.get(i));
-
-        // if -1, shift to left
-        // for (int i = startingIndex; i <= _index; i++)
-        // this.set(this.get(i), this.get(i + 1));
-
-        // else throw IllegalArgumentException
+    private void shiftElements(int index, int direction) {
+        if (index == SHIFT_RIGHT) {
+            // starting at _index, shift each item to the right by 1 until you reach index
+            for (int i = _index; i >= index; i--) {
+                this.set(i + 1, this.get(i));
+            }
+        }
+        else if (index == SHIFT_LEFT) {
+            // starting at index, shift each item to the left by 1 until you reach _index
+            for (int i = index; i <= _index; i++) {
+                this.set(i - 1, this.get(i));
+            }
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 }
