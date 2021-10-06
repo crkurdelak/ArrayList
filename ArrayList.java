@@ -10,9 +10,11 @@ public class ArrayList<E> {
     // TODO implement class
 
     private static final int DEFAULT_CAPACITY = 10;
+
     // for use in private helper method shiftElements:
     private static final int SHIFT_RIGHT = 1;
     private static final int SHIFT_LEFT = -1;
+
     // for use in private helper method growArray:
     private static final int GROW_BY = 10;
 
@@ -77,11 +79,11 @@ public class ArrayList<E> {
      *
      * @param index the index of the element to return
      * @return the element at the specified position in this list
-     * @throws IndexOutOfBoundsException if the index is out of range (index < 0 || index >= size)
+     * @throws IndexOutOfBoundsException if the index is out of range
      */
     @SuppressWarnings("unchecked")
     public E get(int index) {
-        if (index > 0 && index < _index) {
+        if (ArrayList.isValidIndex(index)) {
             return (E)_values[index];
             // ONLY cast right before return
         }
@@ -97,19 +99,25 @@ public class ArrayList<E> {
      *
      * @param index
      * @param element
-     * @throws IndexOutOfBoundsException if the index is out of bounds (index < 0 || index > size())
+     * @throws IndexOutOfBoundsException if the specified index is out of bounds
      */
     public void add(int index, E element) {
         // validate index, if invalid, throw IndexOutOfBoundsException
-        // TODO shift values to right
-        // _values[index] = value;
+        if (isValidIndex(index)) {
+            // TODO implement add()
+            shiftElements(index, SHIFT_RIGHT);
+            this.set(index, element);
+        }
+        else {
+            throw new IndexOutOfBoundsException();
+        }
     }
 
 
     /**
      * Appends the specified element to the end of this list.
      *
-     * @param element
+     * @param element the element to be appended to this list
      * @return true if this collection has changed as a result of the call
      */
     public boolean add(E element) {
@@ -124,12 +132,21 @@ public class ArrayList<E> {
      *
      * @param index the index of the element to be removed
      * @return the element that was removed from the list
+     * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public E remove(int index) {
         // TODO implement remove
-        // validate index
-        // use set method to set to null
-        // shift elements to left to fill in hole
+        E temp;
+        if (isValidIndex(index)) {
+            // use set method to set the element to null
+            temp = this.set(index, null);
+            // shift elements to left to fill in hole
+            this.shiftElements(index, SHIFT_LEFT);
+        }
+        else {
+            throw new IndexOutOfBoundsException();
+        }
+        return temp;
     }
 
 
@@ -137,8 +154,11 @@ public class ArrayList<E> {
      * Removes all the elements from this list. The list will be empty after this call returns.
      */
     public void clear() {
-        // TODO implement clear
-        // use remove method AND set _index to 0
+        // TODO find out if it's a waste of time to shift the elements every time bc of using remove method
+        for (int i = 0; i < _index; i++) {
+            this.remove(i);
+        }
+        _index = 0;
     }
 
 
@@ -148,10 +168,19 @@ public class ArrayList<E> {
      * @param index the index of the element to replace
      * @param element the element to be stored at the specified position
      * @return the element previously at the specified position
+     * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public E set(int index, E element) {
-        // TODO implement set
-        // validate index
+        // temporary variable to store old element
+        E temp;
+        if (isValidIndex(index)) {
+            temp = this.get(index);
+            _values[index] = element;
+        }
+        else {
+            throw new IndexOutOfBoundsException();
+        }
+        return temp;
     }
 
 
@@ -172,8 +201,6 @@ public class ArrayList<E> {
     }
 
 
-    // TODO write private helper method to validate index
-
     /**
      * Returns true if specified int is a valid index in this list, and false if it is not.
      *
@@ -181,35 +208,44 @@ public class ArrayList<E> {
      * @return true if the index is valid
      * false if the index is invalid
      */
-    private boolean isValidIndex(int index) {
-        // return true if index is valid (index < 0 || index > size())
-        // else return false
+    private static boolean isValidIndex(int index) {
+        boolean result = false;
+        if (index > 0 && index < this.size()) {
+            result = true;
+        }
+        return result;
     }
 
 
-    // TODO write private helper method to grow array
     /**
-     * Grows the array by TODO figure out growing strategy
+     * Grows the backing array by 10.
+     * Creates a new backing array, and copies all elements of old backing array to new backing array.
      */
     private void growArray() {
-
+        // make new array of size (_index + GROW_BY)
+        Object[] newArray = new Object[_index + GROW_BY];
+        // for each element of old array, new array[i] = old array[i]
+        for (int i = 0; i < _index; i++) {
+            newArray[i] = this.get(i);
+        }
+        _values = newArray;
     }
 
     // TODO write private helper method to shift elements
     /**
-     * Shifts elements
-     * @param index
-     * @param direction
+     * Shifts elements to the left or right starting at the specified starting index.
+     * @param startingIndex the starting index
+     * @param direction Either -1 for left or 1 for right
      * @throws IllegalArgumentException if passed a value other than -1 or 1 for direction
      */
-    private void shiftElements(int index, int direction) {
+    private void shiftElements(int startingIndex, int direction) {
         // if 1, then shift to right
-        // for (int i = _index; i <= index; i--)
-        // _values[i + 1] = values[i];
+        // for (int i = _index; i <= startingIndex; i--)
+        // this.set(this.get(i + 1), this.get(i));
 
         // if -1, shift to left
-        // for (int i = index; i <= _index; i++)
-        // _values[i] = values[i + 1];
+        // for (int i = startingIndex; i <= _index; i++)
+        // this.set(this.get(i), this.get(i + 1));
 
         // else throw IllegalArgumentException
     }
