@@ -88,7 +88,7 @@ public class ArrayList<E> {
      */
     @SuppressWarnings("unchecked")
     public E get(int index) {
-        if (ArrayList.isValidIndex(index)) {
+        if (this.isValidIndex(index)) {
             return (E)_values[index];
             // ONLY cast right before return
         }
@@ -108,7 +108,7 @@ public class ArrayList<E> {
      */
     public void add(int index, E element) {
         // validate index, if invalid, throw IndexOutOfBoundsException
-        if (isValidIndex(index)) {
+        if (this.isValidIndex(index)) {
             // TODO implement add()
             shiftElements(index, SHIFT_RIGHT);
             this.set(index, element);
@@ -142,7 +142,7 @@ public class ArrayList<E> {
     public E remove(int index) {
         // TODO implement remove
         E temp;
-        if (isValidIndex(index)) {
+        if (this.isValidIndex(index)) {
             // use set method to set the element to null
             temp = this.set(index, null);
             // shift elements to left to fill in hole
@@ -178,7 +178,7 @@ public class ArrayList<E> {
     public E set(int index, E element) {
         // temporary variable to store old element
         E temp;
-        if (isValidIndex(index)) {
+        if (this.isValidIndex(index)) {
             temp = this.get(index);
             _values[index] = element;
         }
@@ -227,7 +227,7 @@ public class ArrayList<E> {
      * @return true if the index is valid
      * false if the index is invalid
      */
-    private static boolean isValidIndex(int index) {
+    private boolean isValidIndex(int index) {
         boolean result = false;
         if (index > 0 && index < this.size()) {
             result = true;
