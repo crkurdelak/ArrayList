@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 /**
  * // TODO write class description
  * A list of elements of type E.
@@ -10,6 +12,9 @@ public class ArrayList<E> {
     // TODO implement class
 
     private static final int DEFAULT_CAPACITY = 10;
+
+    // for use in indexOf method
+    private static final int NOT_FOUND = -1;
 
     // for use in private helper method shiftElements:
     private static final int SHIFT_RIGHT = 1;
@@ -198,6 +203,20 @@ public class ArrayList<E> {
     public int indexOf(E element) {
         // TODO implement indexOf
         // linear search
+        int index = NOT_FOUND;
+        boolean isFound = false;
+        int i = 0;
+        // go through array (while loop)
+        while (!isFound && i < _index) {
+            // check if each element is the same as the target
+            // if found, exit loop, result = that index
+            if (Objects.equals(element, this.get(i))) {
+                index = i;
+                isFound = true;
+            }
+            i++;
+        }
+        return index;
     }
 
 
