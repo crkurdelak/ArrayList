@@ -1,7 +1,6 @@
 import java.util.Objects;
 
 /**
- * TODO write class description
  * A list of elements of type E.
  *
  * @param <E> the type of elements in this list
@@ -9,8 +8,6 @@ import java.util.Objects;
  * @author ckurdelak20@georgefox.edu
  */
 public class ArrayList<E> {
-    // TODO implement class
-
     private static final int DEFAULT_CAPACITY = 10;
 
     // for use in indexOf method
@@ -31,11 +28,25 @@ public class ArrayList<E> {
     /**
      * Constructs a new ArrayList object with the specified initial capacity.
      *
+     * If the initial capacity is 0, constructs the ArrayList with the default capacity of 10.
+     *
      * @param initialCapacity the initial capacity of this ArrayList's backing array
+     *
+     * @throws IllegalArgumentException if the initial capacity is less than 0
      */
     public ArrayList(int initialCapacity) {
-        _values = new Object[initialCapacity];
-        _index = 0;
+        if (initialCapacity >= 0) {
+            if (initialCapacity == 0) {
+                _values = new Object[DEFAULT_CAPACITY];
+            }
+            else {
+                _values = new Object[initialCapacity];
+                _index = 0;
+            }
+        }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
 
@@ -118,7 +129,7 @@ public class ArrayList<E> {
      * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public boolean add(E element) {
-        add(_index, element);
+        this.add(_index, element);
         return true;
     }
 
@@ -149,9 +160,8 @@ public class ArrayList<E> {
      * Removes all the elements from this list. The list will be empty after this call returns.
      */
     public void clear() {
-        // TODO find out if it's a waste of time to shift the elements every time bc of using remove method
         for (int i = 0; i < _index; i++) {
-            this.remove(i);
+            _values[i] = null;
         }
         _index = 0;
     }
@@ -207,12 +217,14 @@ public class ArrayList<E> {
     /**
      * Returns true if specified int is a valid index in this list, and false if it is not.
      *
+     * A valid index must be at least 0 and at most one more than the current highest index
+     *
      * @param index the index to validate
      * @return true if the index is valid
      * false if the index is invalid
      */
     private boolean isValidIndex(int index) {
-        return index >= 0 && index < this.size();
+        return index >= 0 && index <= this.size() + 1;
     }
 
 
@@ -221,9 +233,8 @@ public class ArrayList<E> {
      * Creates a new backing array, and copies all elements of old backing array to new backing array.
      */
     private void growArray() {
-        // make new array of size (_index + GROW_BY)
+        // TODO check if there is enough memory to grow the array
         Object[] newArray = new Object[_index + GROW_BY];
-        // for each element of old array, new array[i] = old array[i]
         for (int i = 0; i < _index; i++) {
             newArray[i] = this.get(i);
         }
@@ -238,13 +249,13 @@ public class ArrayList<E> {
      * @throws IllegalArgumentException if passed a value other than -1 or 1 for direction
      */
     private void shiftElements(int index, int direction) {
-        if (index == SHIFT_RIGHT) {
+        if (direction == SHIFT_RIGHT) {
             // starting at _index, shift each item to the right by 1 until you reach index
             for (int i = _index; i >= index; i--) {
                 this.set(i + 1, this.get(i));
             }
         }
-        else if (index == SHIFT_LEFT) {
+        else if (direction == SHIFT_LEFT) {
             // starting at index, shift each item to the left by 1 until you reach _index
             for (int i = index; i <= _index; i++) {
                 this.set(i - 1, this.get(i));
