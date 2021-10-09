@@ -111,7 +111,9 @@ public class ArrayList<E> {
             if (_index >= _values.length) {
                 this.growArray();
             }
-            shiftElements(index, SHIFT_RIGHT);
+            if (this.get(index) != null) {
+                shiftElements(index, SHIFT_RIGHT);
+            }
             this.set(index, element);
             _index ++;
         }
