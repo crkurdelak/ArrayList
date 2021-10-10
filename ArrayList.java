@@ -88,10 +88,8 @@ public class ArrayList<E> {
      */
     @SuppressWarnings("unchecked")
     public E get(int index) {
-        // if (this.canAddAt(index))
-        if (this.isValidIndex(index)) { // TODO see if the problem is here
+        if (this.isValidIndex(index)) {
             return (E)_values[index];
-            // ONLY cast right before return
         }
         else {
             throw new IndexOutOfBoundsException();
@@ -140,8 +138,7 @@ public class ArrayList<E> {
      */
     public E remove(int index) {
         E oldElement;
-        // this.isValidIndex(index) &&
-        if (!this.isEmpty()) { // TODO maybe remove validation bc redundant
+        if (!this.isEmpty()) {
             oldElement = this.set(index, null);
             this.shiftElements(index, SHIFT_LEFT);
             _index --;
@@ -281,7 +278,7 @@ public class ArrayList<E> {
         else if (direction == SHIFT_LEFT) {
             // starting at index, shift each item to the left by 1 until you reach _index
             for (int i = index; i <= _index; i++) {
-                this.set(i - 1, this.get(i));
+                _values[i] = _values[i + 1];
             }
         }
         else {
