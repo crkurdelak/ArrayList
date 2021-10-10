@@ -88,7 +88,8 @@ public class ArrayList<E> {
      */
     @SuppressWarnings("unchecked")
     public E get(int index) {
-        if (this.isValidIndex(index)) {
+        // if (this.canAddAt(index))
+        if (this.isValidIndex(index)) { // TODO see if the problem is here
             return (E)_values[index];
             // ONLY cast right before return
         }
@@ -107,19 +108,12 @@ public class ArrayList<E> {
      * @throws IndexOutOfBoundsException if the specified index is out of range
      */
     public void add(int index, E element) {
-        if (this.isValidIndex(index)) {
-            if (_index >= _values.length) {
-                this.growArray();
-            }
-            if (this.get(index) != null) {
-                shiftElements(index, SHIFT_RIGHT);
-            }
-            this.set(index, element);
-            _index ++;
+        if (_index >= _values.length) {
+            this.growArray();
         }
-        else {
-            throw new IndexOutOfBoundsException();
-        }
+        shiftElements(index, SHIFT_RIGHT);
+        this.set(index, element);
+        _index ++;
     }
 
 
@@ -146,7 +140,8 @@ public class ArrayList<E> {
      */
     public E remove(int index) {
         E oldElement;
-        if (this.isValidIndex(index) && !this.isEmpty()) {
+        // this.isValidIndex(index) &&
+        if (!this.isEmpty()) { // TODO maybe remove validation bc redundant
             oldElement = this.set(index, null);
             this.shiftElements(index, SHIFT_LEFT);
             _index --;
@@ -179,7 +174,8 @@ public class ArrayList<E> {
      */
     public E set(int index, E element) {
         E oldElement;
-        if (this.isValidIndex(index)) {
+        // if this.isValidIndex(index)
+        if (this.canAddAt(index)) {
             oldElement = this.get(index);
             _values[index] = element;
         }
@@ -219,13 +215,35 @@ public class ArrayList<E> {
     /**
      * Returns true if specified int is a valid index in this list, and false if it is not.
      *
-     * A valid index must be at least 0 and at most one more than the current highest index
+     * An index is valid if index > 0 and index <= size()
      *
      * @param index the index to validate
      * @return true if the index is valid
      * false if the index is invalid
      */
     private boolean isValidIndex(int index) {
+        boolean result = false;
+        if (index == 0) {
+            result = true;
+        }
+        else if (index > 0 && index <= this.size()) {
+            result = true;
+        }
+        return result;
+    }
+
+
+    /**
+     * Returns true if it is legal to add an element at the specified index.
+     *
+     * It is legal to add at an index if (0 <= index <= size() + 1)
+     *
+     * @param index
+     * @return true if it is legal to add an element at the specified index
+     * else return false
+     */
+    private boolean canAddAt(int index) {
+        // can add at any index (0 <= index <= size() + 1)
         return index >= 0 && index <= this.size() + 1;
     }
 
@@ -254,7 +272,10 @@ public class ArrayList<E> {
         if (direction == SHIFT_RIGHT) {
             // starting at _index, shift each item to the right by 1 until you reach index
             for (int i = _index; i >= index; i--) {
-                this.set(i + 1, this.get(i));
+                if (_values.length <= _index + 1) {
+                    this.growArray();
+                }
+                _values[i + 1] = _values[i];
             }
         }
         else if (direction == SHIFT_LEFT) {
