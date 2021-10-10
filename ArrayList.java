@@ -154,6 +154,7 @@ public class ArrayList<E> {
      * Removes all the elements from this list. The list will be empty after this call returns.
      */
     public void clear() {
+        // TODO find out what to do if list is already empty
         for (int i = 0; i < _index; i++) {
             _values[i] = null;
         }
