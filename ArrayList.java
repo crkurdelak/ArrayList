@@ -110,7 +110,7 @@ public class ArrayList<E> {
             this.growArray();
         }
         shiftElements(index, SHIFT_RIGHT);
-        this.set(index, element);
+        _values[index] = element;
         _index ++;
     }
 
@@ -171,8 +171,7 @@ public class ArrayList<E> {
      */
     public E set(int index, E element) {
         E oldElement;
-        // if this.isValidIndex(index)
-        if (this.canAddAt(index)) {
+        if (this.isValidIndex(index)) {
             oldElement = this.get(index);
             _values[index] = element;
         }
@@ -212,7 +211,7 @@ public class ArrayList<E> {
     /**
      * Returns true if specified int is a valid index in this list, and false if it is not.
      *
-     * An index is valid if index > 0 and index <= size()
+     * An index is valid if index > 0 and index < size()
      *
      * @param index the index to validate
      * @return true if the index is valid
@@ -223,25 +222,10 @@ public class ArrayList<E> {
         if (index == 0) {
             result = true;
         }
-        else if (index > 0 && index <= this.size()) {
+        else if (index > 0 && index < this.size()) {
             result = true;
         }
         return result;
-    }
-
-
-    /**
-     * Returns true if it is legal to add an element at the specified index.
-     *
-     * It is legal to add at an index if (0 <= index <= size() + 1)
-     *
-     * @param index
-     * @return true if it is legal to add an element at the specified index
-     * else return false
-     */
-    private boolean canAddAt(int index) {
-        // can add at any index (0 <= index <= size() + 1)
-        return index >= 0 && index <= this.size() + 1;
     }
 
 
