@@ -235,12 +235,17 @@ public class ArrayList<E> {
      * Creates a new backing array, and copies all elements of old backing array to new backing array.
      */
     private void growArray() {
-        // TODO check if there is enough memory to grow the array
-        Object[] newArray = new Object[_index + GROW_BY];
-        for (int i = 0; i < _index; i++) {
-            newArray[i] = this.get(i);
+        // TODO test this
+        if (_index < Integer.MAX_VALUE) {
+            Object[] newArray = new Object[_index + GROW_BY];
+            for (int i = 0; i < _index; i++) {
+                newArray[i] = this.get(i);
+            }
+            _values = newArray;
         }
-        _values = newArray;
+        else {
+            throw new OutOfMemoryError();
+        }
     }
 
 
