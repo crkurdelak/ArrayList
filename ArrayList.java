@@ -8,6 +8,8 @@ import java.util.Objects;
  * @author ckurdelak20@georgefox.edu
  */
 public class ArrayList<E> {
+    // TODO implement Iterable<T> interface
+    // TODO make inner class ArrayListIterator<E> that implements Iterator<E> interface
     private static final int DEFAULT_CAPACITY = 10;
 
     // for use in indexOf method
