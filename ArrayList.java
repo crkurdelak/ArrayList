@@ -1,3 +1,5 @@
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.Objects;
 
 /**
@@ -7,9 +9,8 @@ import java.util.Objects;
  *
  * @author ckurdelak20@georgefox.edu
  */
-public class ArrayList<E> {
-    // TODO implement Iterable<T> interface
-    // TODO make inner class ArrayListIterator<E> that implements Iterator<E> interface
+public class ArrayList<E> implements Iterable<E> {
+
     private static final int DEFAULT_CAPACITY = 10;
 
     // for use in indexOf method
@@ -212,6 +213,15 @@ public class ArrayList<E> {
 
 
     /**
+     * TODO javadocs
+     * @return
+     */
+    public Iterator<E> iterator() {
+        return new ArrayListIterator();
+    }
+
+
+    /**
      * Returns true if specified int is a valid index in this list, and false if it is not.
      *
      * An index is valid if index > 0 and index < size()
@@ -275,6 +285,50 @@ public class ArrayList<E> {
         }
         else {
             throw new IllegalArgumentException();
+        }
+    }
+
+
+    /**
+     * Implements the Iterator<T> interface for the ArrayList class.
+     */
+    private class ArrayListIterator implements Iterator<E> {
+
+        private int _currentIndex;
+
+        /**
+         * Constructs a new ArrayListIterator object.
+         */
+        public ArrayListIterator() {
+            _currentIndex = 0;
+        }
+
+
+        /**
+         * Returns true if the current index is less than the size of the ArrayList,
+         * else returns false.
+         *
+         * @return true if the current index is less than the size of the ArrayList
+         * else return false
+         */
+        public boolean hasNext() {
+            return (_currentIndex < size());
+        }
+
+
+        /**
+         * Returns the item at the current index.
+         *
+         * @return the item at the current index
+         * @throws NoSuchElementException if the item at the current index is null
+         */
+        public E next() {
+            E item = get(_currentIndex);
+            if (item == null) {
+                throw new NoSuchElementException();
+            }
+            _currentIndex ++;
+            return item;
         }
     }
 }
