@@ -1,3 +1,5 @@
+import org.junit.Test;
+
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -213,8 +215,9 @@ public class ArrayList<E> implements Iterable<E> {
 
 
     /**
-     * TODO javadocs
-     * @return
+     * Returns a  new ArrayListIterator object.
+     *
+     * @return a new ArrayListIterator object
      */
     public Iterator<E> iterator() {
         return new ArrayListIterator();
@@ -247,7 +250,7 @@ public class ArrayList<E> implements Iterable<E> {
      * Creates a new backing array, and copies all elements of old backing array to new backing array.
      */
     private void growArray() {
-        // TODO test this
+        // TODO test this with huge numbers of things being added to see if it throws the right exception
         if (_index < Integer.MAX_VALUE) {
             Object[] newArray = new Object[_index + GROW_BY];
             for (int i = 0; i < _index; i++) {
@@ -263,6 +266,7 @@ public class ArrayList<E> implements Iterable<E> {
 
     /**
      * Shifts elements to the left or right starting at the specified starting index.
+     *
      * @param index the starting index
      * @param direction Either -1 for left or 1 for right
      * @throws IllegalArgumentException if passed a value other than -1 or 1 for direction
@@ -317,9 +321,9 @@ public class ArrayList<E> implements Iterable<E> {
 
 
         /**
-         * Returns the item at the current index.
+         * Returns the next item in the iteration.
          *
-         * @return the item at the current index
+         * @return the next item in the iteration
          * @throws NoSuchElementException if the item at the current index is null
          */
         public E next() {
