@@ -250,8 +250,6 @@ public class ArrayList<E> implements Iterable<E> {
      * array.
      */
     private void growArray() {
-        // TODO test this with huge numbers of things being added to see if it throws the right
-        //  exception
         if (_index < Integer.MAX_VALUE) {
             Object[] newArray = new Object[_index + GROW_BY];
             for (int i = 0; i < _index; i++) {
