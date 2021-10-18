@@ -1,4 +1,3 @@
-import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -103,8 +102,9 @@ public class ArrayList<E> implements Iterable<E> {
 
 
     /**
-     * Inserts the specified element at the specified position in this list. Shifts the element currently
-     * at that position (if any) and any subsequent elements to the right (adds one to their indices).
+     * Inserts the specified element at the specified position in this list. Shifts the element
+     * currently at that position (if any) and any subsequent elements to the right (adds one to
+     * their indices).
      *
      * @param index the index where the element will be inserted
      * @param element the element to be inserted
@@ -159,7 +159,6 @@ public class ArrayList<E> implements Iterable<E> {
      * Removes all the elements from this list. The list will be empty after this call returns.
      */
     public void clear() {
-        // TODO find out what to do if list is already empty
         for (int i = 0; i < _index; i++) {
             _values[i] = null;
         }
@@ -247,10 +246,12 @@ public class ArrayList<E> implements Iterable<E> {
 
     /**
      * Grows the backing array by 10.
-     * Creates a new backing array, and copies all elements of old backing array to new backing array.
+     * Creates a new backing array, and copies all elements of old backing array to new backing
+     * array.
      */
     private void growArray() {
-        // TODO test this with huge numbers of things being added to see if it throws the right exception
+        // TODO test this with huge numbers of things being added to see if it throws the right
+        //  exception
         if (_index < Integer.MAX_VALUE) {
             Object[] newArray = new Object[_index + GROW_BY];
             for (int i = 0; i < _index; i++) {
